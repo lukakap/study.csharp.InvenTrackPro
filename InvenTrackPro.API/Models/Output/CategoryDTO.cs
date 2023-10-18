@@ -1,10 +1,9 @@
-﻿namespace InvenTrackPro.API.Models
+﻿namespace InvenTrackPro.API.Models.Output
 {
-    public class Category
+    public class CategoryDTO
     {
         public int CategoryId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public ICollection<Product> Products { get; set; }
     }
 }

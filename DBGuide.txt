@@ -1,0 +1,22 @@
+--------------------------------------------------
+Running SQL Server in a Docker Container
+--------------------------------------------------
+
+docker pull mcr.microsoft.com/mssql/server:2019-latest
+
+docker run -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=password' \
+   -p 1433:1433 --name sql_container \
+   -d mcr.microsoft.com/mssql/server:2019-latest
+
+docker run -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=VGefBMnlh2sMZPf' -p 1433:1433 --name sql_container -d mcr.microsoft.com/mssql/server:2019-latest
+
+
+--------------------------------------------------
+Connection String
+--------------------------------------------------
+
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=localhost,1433;Database=UniversityDatabase;User Id=sa;Password=VGefBMnlh2sMZPf;"
+  }
+}
