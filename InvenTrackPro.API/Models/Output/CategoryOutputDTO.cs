@@ -1,6 +1,6 @@
 ﻿namespace InvenTrackPro.API.Models.Output
 {
-    public class CategoryDTO
+    public class CategoryOutputDTO
     {
         public int CategoryId { get; set; }
         public string Name { get; set; }

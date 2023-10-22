@@ -1,5 +1,6 @@
 using InvenTrackPro.API.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,10 +13,19 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<InventoryContext>(options => options.UseSqlServer(
         builder.Configuration.GetConnectionString("DefaultConnection")
-    ));
+));
+
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:4200");
+        });
+});
 
 var app = builder.Build();
-
+ 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -24,6 +34,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors();
 
 app.UseAuthorization();
 

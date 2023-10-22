@@ -1,8 +1,9 @@
 ﻿using InvenTrackPro.API.Data;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using InvenTrackPro.API.Models;
 using Microsoft.EntityFrameworkCore;
+using InvenTrackPro.API.Models.Output;
+using InvenTrackPro.API.Models.Input;
 
 namespace InvenTrackPro.API.Controllers
 {
@@ -18,9 +19,11 @@ namespace InvenTrackPro.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<ICollection<Models.Output.ProductVariationDTO>>> GetProductVariations() { 
-            var variations = await (from v in  _context.ProductVariations
-                                    select new Models.Output.ProductVariationDTO {
+        public async Task<ActionResult<ICollection<ProductVariationOutputDTO>>> GetProductVariations()
+        {
+            var variations = await (from v in _context.ProductVariations
+                                    select new ProductVariationOutputDTO
+                                    {
                                         VariationId = v.ProductVariationId,
                                         VariationName = v.ProductVariationName,
                                         VariationDescription = v.ProductVariationDescription,
@@ -32,9 +35,9 @@ namespace InvenTrackPro.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Models.Input.ProductVariationDTO>> AddProductVariation(Models.Input.ProductVariationDTO variation)
+        public async Task<ActionResult<ProductVariationInputDTO>> AddProductVariation(ProductVariationInputDTO variation)
         {
-            var newVariation = new Models.ProductVariation
+            var newVariation = new ProductVariation
             {
                 ProductVariationName = variation.Name,
                 ProductVariationDescription = variation.Description,
@@ -45,7 +48,7 @@ namespace InvenTrackPro.API.Controllers
 
             await _context.ProductVariations.AddAsync(newVariation);
 
-            Models.Product product = _context.Products.Where(x => x.ProductId == newVariation.ProductId).FirstOrDefault();
+            Product product = _context.Products.Where(x => x.ProductId == newVariation.ProductId).FirstOrDefault();
 
             product.Variations.Add(newVariation);
 

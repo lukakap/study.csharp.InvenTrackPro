@@ -1,6 +1,6 @@
 ﻿namespace InvenTrackPro.API.Models.Output
 {
-    public class ProductVariationDTO
+    public class ProductVariationOutputDTO
     {
         public int VariationId { get; set; }
         public string VariationName { get; set; }

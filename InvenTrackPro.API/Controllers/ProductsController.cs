@@ -1,6 +1,7 @@
 ﻿using InvenTrackPro.API.Data;
 using InvenTrackPro.API.Models;
-using Microsoft.AspNetCore.Http;
+using InvenTrackPro.API.Models.Input;
+using InvenTrackPro.API.Models.Output;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,15 +13,16 @@ namespace InvenTrackPro.API.Controllers
     {
         private readonly InventoryContext _context;
 
-        public ProductsController(InventoryContext context) {
+        public ProductsController(InventoryContext context)
+        {
             _context = context;
         }
-    
+
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Models.Output.ProductDTO>>> GetProducts()
+        public async Task<ActionResult<IEnumerable<ProductOutputDTO>>> GetProducts()
         {
             var products = await (from prod in _context.Products
-                                  select new Models.Output.ProductDTO
+                                  select new ProductOutputDTO
                                   {
                                       ProductId = prod.ProductId,
                                       ProductName = prod.ProductName,
@@ -28,7 +30,7 @@ namespace InvenTrackPro.API.Controllers
                                       Price = prod.Price,
                                       AvailableStock = prod.AvailableStock,
                                       CategoryName = prod.Category.Name,
-                                      Variations = prod.Variations.Select(variation => new Models.Output.ProductVariationDTO
+                                      Variations = prod.Variations.Select(variation => new ProductVariationOutputDTO
                                       {
                                           VariationId = variation.ProductVariationId,
                                           VariationName = variation.ProductVariationName,
@@ -42,10 +44,10 @@ namespace InvenTrackPro.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Models.Input.ProductDTO>> AddProduct(Models.Input.ProductDTO product) 
+        public async Task<ActionResult<ProductInputDTO>> AddProduct(ProductInputDTO product)
         {
-            if (!ModelState.IsValid) 
-            { 
+            if (!ModelState.IsValid)
+            {
                 return BadRequest(ModelState);
             }
 
@@ -53,7 +55,7 @@ namespace InvenTrackPro.API.Controllers
 
             if (product.CategoryId == null)
             {
-                newProduct = new Models.Product
+                newProduct = new Product
                 {
                     ProductName = product.ProductName,
                     ProductDescription = product.ProductDescription,
@@ -61,8 +63,9 @@ namespace InvenTrackPro.API.Controllers
                     AvailableStock = product.AvailableStock
                 };
             }
-            else {
-                newProduct = new Models.Product
+            else
+            {
+                newProduct = new Product
                 {
                     ProductName = product.ProductName,
                     ProductDescription = product.ProductDescription,
@@ -75,7 +78,7 @@ namespace InvenTrackPro.API.Controllers
             _context.Products.Add(newProduct);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(AddProduct), new { id = newProduct.ProductId}, newProduct);
+            return CreatedAtAction(nameof(AddProduct), new { id = newProduct.ProductId }, newProduct);
 
         }
     }

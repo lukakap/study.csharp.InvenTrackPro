@@ -2,7 +2,7 @@
 
 namespace InvenTrackPro.API.Models.Input
 {
-    public class ProductDTO
+    public class ProductInputDTO
     {
         public int ProductId { get; set; }
         public string ProductName { get; set; }
